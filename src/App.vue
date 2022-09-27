@@ -32,7 +32,7 @@
       color="#ea580c"
       dark
       prominent
-      src="./assets/pexels-pixabay-163444.jpg"
+      src="./assets/banner.webp"
       fade-img-on-scroll
     >
       <template v-slot:img="{ props }">
@@ -45,7 +45,7 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <!-- <v-container fluid> -->
-      <v-app-bar-title width="300">forward</v-app-bar-title>
+      <v-app-bar-title width="400">forward</v-app-bar-title>
       <!-- </v-container> -->
 
       <v-spacer></v-spacer>
