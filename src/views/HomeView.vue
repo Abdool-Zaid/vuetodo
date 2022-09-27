@@ -32,6 +32,90 @@
         {{task.subtitle}}</v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
+
+          <!-- <v-btn icon 
+          @click.stop="alterStep(task.id)"
+          >
+          
+          </v-btn> -->
+          <div class="text-center">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="red lighten-2"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          icon
+        >
+        <v-icon color="primary lighten-4">mdi-pencil-box-multiple-outline
+</v-icon>        </v-btn>
+      </template>
+
+      <v-card>
+        <v-card-title class="text-h5 grey lighten-2">
+edit task
+        </v-card-title>
+
+        <v-card-text>
+          <v-row justify="center" class="pt-6">
+    <v-col
+      cols="12"
+      sm="10"
+      md="8"
+      lg="6"
+    >
+      <v-card ref="form" hide-details >
+        <v-card-text>
+          <v-text-field
+            ref="alteredTitle"
+            v-model="alteredTitle"
+            label="task"
+              required
+              clearable
+          ></v-text-field>
+          <v-text-field
+            ref="alteredsubtitle"
+            v-model="alteredsubtitle"
+            clearable
+            label="subtitle"
+          ></v-text-field>
+     
+        </v-card-text>
+        <v-divider class="mt-12"></v-divider>
+        <v-card-actions>
+          
+          <v-btn
+          color="primary"
+          text
+          @click="alterStep(task.id)"
+          >
+          Submit
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-col>
+</v-row>         </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+          id="closeButton"
+            color="primary"
+            text
+            @click="dialog = false"
+          >
+          close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
           <v-btn icon 
           @click.stop="nextStep(task.id)"
           >
@@ -93,18 +177,23 @@
   export default {
     name: 'Home',
     data: () => ({
+      dialog: false,
       title:'',
+      alteredTitle:'',
 subtitle:'',
       settings: [],
       tasks:[
         {
-          id:1,
+          id:'t0',
           title:'stay hungry',
           subtitle:'stay foolish',
           status:false,
         },
       ],
     }),
+    mounted() {
+    this.loadFunc();
+  },
 methods:{
   executedTask(id){
 let task= this.tasks.filter(task=>task.id==id)[0] 
@@ -114,7 +203,7 @@ nextStep(id){
   this.tasks= this.tasks.filter(task=>task.id!==id) },
   progressForward(){
 let newTask={
-  id:this.tasks.length+1,
+  id:`t`+JSON.stringify( Date.now()),
   title:this.title,
   subtitle:this.subtitle,
   status:false,
@@ -123,8 +212,24 @@ let newTask={
 this.tasks.push(newTask)
 this.title=''
 this.subtitle=''
+},
+alterStep(id){
+  let task= this.tasks.filter(task=>task.id==id)[0] 
+    task.title=this.alteredTitle,
+    task.subtitle=this.alteredsubtitle
+    this.alteredTitle=''
+    this.alteredsubtitle=''
+    this.dismisModal()
   },
+  loadFunc(){
+  // [window,console]=[console,window]
+},
+dismisModal(){
+        let clickEvent = new Event('click');
+        document.querySelector('#closeButton').dispatchEvent(clickEvent)
+
 },
 
+}
   }
 </script>
