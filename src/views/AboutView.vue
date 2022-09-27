@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <p>
+    <p class="pa-6">
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Impedit
       cupiditate dicta illo quae, ipsa veritatis neque ratione delectus sit
       maxime eius a consequuntur quam placeat perspiciatis doloribus totam
