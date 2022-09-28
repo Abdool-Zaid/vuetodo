@@ -194,7 +194,9 @@ task.status=!task.status
 localStorage.setItem('tasks', JSON.stringify(this.tasks))
 },
 nextStep(id){
-  this.tasks= this.tasks.filter(task=>task.id!==id) },
+  this.tasks= this.tasks.filter(task=>task.id!==id) 
+  localStorage.setItem('tasks', JSON.stringify(this.tasks))
+},
   progressForward(){
 let newTask={
   id:`t`+JSON.stringify( Date.now()),
