@@ -182,14 +182,7 @@ edit task
       alteredTitle:'',
 subtitle:'',
       settings: [],
-      tasks:[
-        {
-          id:'t0',
-          title:'stay hungry',
-          subtitle:'stay foolish',
-          status:false,
-        },
-      ],
+      tasks:JSON.parse(localStorage.tasks),
     }),
     mounted() {
     this.loadFunc();
@@ -198,6 +191,7 @@ methods:{
   executedTask(id){
 let task= this.tasks.filter(task=>task.id==id)[0] 
 task.status=!task.status
+localStorage.setItem('tasks', JSON.stringify(this.tasks))
 },
 nextStep(id){
   this.tasks= this.tasks.filter(task=>task.id!==id) },
@@ -211,7 +205,9 @@ let newTask={
 }
 this.tasks.push(newTask)
 this.title=''
-this.subtitle=''
+this.subtitle='';
+localStorage.setItem('tasks', JSON.stringify(this.tasks))
+
 },
 alterStep(id){
   let task= this.tasks.filter(task=>task.id==id)[0] 
@@ -219,10 +215,23 @@ alterStep(id){
     task.subtitle=this.alteredsubtitle
     this.alteredTitle=''
     this.alteredsubtitle=''
+localStorage.setItem('tasks', JSON.stringify(this.tasks))
+
     this.dismisModal()
   },
   loadFunc(){
-  // [window,console]=[console,window]
+    let tasks = JSON.parse(localStorage.getItem("tasks"))? JSON.parse(localStorage.getItem("tasks"))
+  :localStorage.setItem('tasks',JSON.stringify(
+    [
+      {
+        id:'t0',
+        title:'stay hungry',
+        subtitle:'stay foolish',
+        status:false,
+      },
+    ]
+    )
+  )
 },
 dismisModal(){
         let clickEvent = new Event('click');

@@ -32,7 +32,7 @@
       color="#ea580c"
       dark
       prominent
-      src="./assets/banner.webp"
+      src="https://raw.githubusercontent.com/Abdool-Zaid/vuetodo/main/src/assets/banner.webp"
       fade-img-on-scroll
     >
       <template v-slot:img="{ props }">
