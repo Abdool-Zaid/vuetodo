@@ -186,43 +186,52 @@ subtitle:'',
     }),
     mounted() {
     this.loadFunc();
+    addEventListener("dblclick", function(id) {
+  let task1=this.tasks.filter(task=>task.id==id)[0]
+  console.table(task1)
+}),
+addEventListener("contextmenu", function(id) {
+  // let task2=this.tasks.filter(task=>task.id==id)[0]
+  let tasks = JSON.parse(localStorage.getItem("tasks"))
+  console.table(tasks)
+  // this.reorderTasks()
+})
   },
-methods:{
+  methods:{
   executedTask(id){
-let task= this.tasks.filter(task=>task.id==id)[0] 
-task.status=!task.status
-localStorage.setItem('tasks', JSON.stringify(this.tasks))
-},
-nextStep(id){
-  this.tasks= this.tasks.filter(task=>task.id!==id) 
-  localStorage.setItem('tasks', JSON.stringify(this.tasks))
-},
+    let task= this.tasks.filter(task=>task.id==id)[0] 
+    task.status=!task.status
+    localStorage.setItem('tasks', JSON.stringify(this.tasks))
+  },
+  nextStep(id){
+    this.tasks= this.tasks.filter(task=>task.id!==id) 
+    localStorage.setItem('tasks', JSON.stringify(this.tasks))
+  },
   progressForward(){
-let newTask={
-  id:`t`+JSON.stringify( Date.now()),
-  title:this.title,
-  subtitle:this.subtitle,
-  status:false,
-
-}
-this.tasks.push(newTask)
-this.title=''
+    let newTask={
+      id:`t`+JSON.stringify( Date.now()),
+      title:this.title,
+      subtitle:this.subtitle,
+      status:false,
+    }
+    this.tasks.push(newTask)
+    this.title=''
 this.subtitle='';
 localStorage.setItem('tasks', JSON.stringify(this.tasks))
 
 },
 alterStep(id){
   let task= this.tasks.filter(task=>task.id==id)[0] 
-    task.title=this.alteredTitle,
-    task.subtitle=this.alteredsubtitle
-    this.alteredTitle=''
-    this.alteredsubtitle=''
-localStorage.setItem('tasks', JSON.stringify(this.tasks))
-
-    this.dismisModal()
-  },
-  loadFunc(){
-    let tasks = JSON.parse(localStorage.getItem("tasks"))? JSON.parse(localStorage.getItem("tasks"))
+  task.title=this.alteredTitle,
+  task.subtitle=this.alteredsubtitle
+  this.alteredTitle=''
+  this.alteredsubtitle=''
+  localStorage.setItem('tasks', JSON.stringify(this.tasks))
+  
+  this.dismisModal()
+},
+loadFunc(){
+  let tasks = JSON.parse(localStorage.getItem("tasks"))? JSON.parse(localStorage.getItem("tasks"))
   :localStorage.setItem('tasks',JSON.stringify(
     [
       {
@@ -233,7 +242,8 @@ localStorage.setItem('tasks', JSON.stringify(this.tasks))
       },
     ]
     )
-  )
+    )
+    // console.table(this.tasks)
 },
 dismisModal(){
         let clickEvent = new Event('click');
@@ -241,6 +251,10 @@ dismisModal(){
 
 },
 
+reorderTasks(){
+[task1,task2]=[task2,task1]
+localStorage.setItem('tasks', JSON.stringify(this.tasks))
 }
   }
+}
 </script>
