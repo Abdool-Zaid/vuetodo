@@ -11,7 +11,6 @@
           <v-list-item-action>
             <v-checkbox :input-value="task.status" color="primary"></v-checkbox>
           </v-list-item-action>
-
           <v-list-item-content>
             <v-list-item-title
               :class="{ 'text-decoration-line-through': task.status }"
@@ -40,12 +39,10 @@
                     </v-icon>
                   </v-btn>
                 </template>
-
                 <v-card>
                   <v-card-title class="text-h5 grey lighten-2">
                     edit task
                   </v-card-title>
-
                   <v-card-text>
                     <v-row justify="center" class="pt-6">
                       <v-col cols="12" sm="10" md="8" lg="6">
@@ -71,6 +68,7 @@
                               color="primary"
                               text
                               @click="alterStep(task.id)"
+                              @keyup.enter="alterStep(task.id)" 
                             >
                               Submit
                             </v-btn>
@@ -79,9 +77,7 @@
                       </v-col>
                     </v-row>
                   </v-card-text>
-
                   <v-divider></v-divider>
-
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -102,12 +98,9 @@
           </v-list-item-action>
         </template>
       </v-list-item>
-
       <v-divider></v-divider>
     </div>
-
     <v-divider></v-divider>
-
     <v-row justify="center" class="pt-6">
       <v-col cols="12" sm="10" md="8" lg="6">
         <v-card ref="form" hide-details>
@@ -118,17 +111,20 @@
               label="task"
               required
               clearable
+              @keyup.enter="progressForward()"
             ></v-text-field>
             <v-text-field
               ref="subtitle"
               v-model="subtitle"
               clearable
               label="subtitle"
+              @keyup.enter="progressForward()"
             ></v-text-field>
           </v-card-text>
           <v-divider class="mt-12"></v-divider>
           <v-card-actions>
-            <v-btn color="primary" text @click="progressForward()">
+            <v-btn color="primary" text @click="progressForward()"
+            @keyup.enter="progressForward()">
               Submit
             </v-btn>
           </v-card-actions>
@@ -137,7 +133,6 @@
     </v-row>
   </v-list-item-group>
 </template>
-
 <script>
 export default {
   name: "Home",
@@ -181,7 +176,6 @@ export default {
       this.alteredTitle = "";
       this.alteredsubtitle = "";
       localStorage.setItem("tasks", JSON.stringify(this.tasks));
-
       this.dismisModal();
     },
     loadFunc() {
@@ -221,7 +215,6 @@ export default {
         this.tasks.push('mlem')
         this.tasks.pop()
         localStorage.setItem("tasks", JSON.stringify(this.tasks));
-
       }
     },
   },
