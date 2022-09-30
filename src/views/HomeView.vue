@@ -1,7 +1,5 @@
+<!-- import {toRaw} from 'vue' -->
 <template>
-  <!-- <h1 class="pa-4">to do page</h1> -->
-  
-
 <v-list-item-group
   v-model="settings"
   multiple
@@ -10,6 +8,7 @@
 
   <v-list-item
   @click="executedTask(task.id)"
+  @contextmenu="reorderTasks(task.id)"
   :class="{'blue lighten-4':task.status}"
   >
   <template v-slot:default="{}">
@@ -173,7 +172,7 @@ edit task
 </template>
 
 <script>
-
+import { toRaw } from "@vue/reactivity";
   export default {
     name: 'Home',
     data: () => ({
@@ -186,16 +185,6 @@ subtitle:'',
     }),
     mounted() {
     this.loadFunc();
-    addEventListener("dblclick", function(id) {
-  let task1=this.tasks.filter(task=>task.id==id)[0]
-  console.table(task1)
-}),
-addEventListener("contextmenu", function(id) {
-  // let task2=this.tasks.filter(task=>task.id==id)[0]
-  let tasks = JSON.parse(localStorage.getItem("tasks"))
-  console.table(tasks)
-  // this.reorderTasks()
-})
   },
   methods:{
   executedTask(id){
@@ -251,9 +240,27 @@ dismisModal(){
 
 },
 
-reorderTasks(){
-[task1,task2]=[task2,task1]
-localStorage.setItem('tasks', JSON.stringify(this.tasks))
+reorderTasks(id){
+  let orderStack=[]
+  let i
+  if(orderStack.length<2){
+    let task=this.tasks.filter(task=>task.id==id)[0]
+    orderStack.push(
+      // toRaw
+      (task))
+    console.table(orderStack)
+  }else if(orderStack.length=2){
+    [orderStack[0],orderStack[1]]=[orderStack[1],orderStack[0]]
+    for(i=0;i<orderStack.length;i++){
+      let task=this.tasks.filter(task=>task.id==orderStack[i].id)[0]
+      task.title=orderStack[i].title,
+      task.subtitle=orderStack[i].subtitle
+    }
+    //  orderStack=[]
+
+}
+
+// localStorage.setItem('tasks', JSON.stringify(this.tasks))
 }
   }
 }
