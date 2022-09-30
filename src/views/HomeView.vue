@@ -54,12 +54,14 @@
                               label="task"
                               required
                               clearable
+                              @keyup.enter="alterStep(task.id)" 
                             ></v-text-field>
                             <v-text-field
                               ref="alteredsubtitle"
                               v-model="alteredsubtitle"
                               clearable
                               label="subtitle"
+                              @keyup.enter="alterStep(task.id)" 
                             ></v-text-field>
                           </v-card-text>
                           <v-divider class="mt-12"></v-divider>
@@ -68,7 +70,6 @@
                               color="primary"
                               text
                               @click="alterStep(task.id)"
-                              @keyup.enter="alterStep(task.id)" 
                             >
                               Submit
                             </v-btn>
