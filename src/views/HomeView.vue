@@ -172,16 +172,17 @@ edit task
 </template>
 
 <script>
-import { toRaw } from "@vue/reactivity";
+// import { toRaw } from "@vue/reactivity";
   export default {
     name: 'Home',
     data: () => ({
       dialog: false,
       title:'',
       alteredTitle:'',
-subtitle:'',
+      subtitle:'',
       settings: [],
       tasks:JSON.parse(localStorage.tasks),
+       orderStack:[]
     }),
     mounted() {
     this.loadFunc();
@@ -232,35 +233,25 @@ loadFunc(){
     ]
     )
     )
-    // console.table(this.tasks)
 },
 dismisModal(){
         let clickEvent = new Event('click');
         document.querySelector('#closeButton').dispatchEvent(clickEvent)
 
 },
-
 reorderTasks(id){
-  let orderStack=[]
-  let i
-  if(orderStack.length<2){
-    let task=this.tasks.filter(task=>task.id==id)[0]
-    orderStack.push(
-      // toRaw
-      (task))
-    console.table(orderStack)
-  }else if(orderStack.length=2){
-    [orderStack[0],orderStack[1]]=[orderStack[1],orderStack[0]]
-    for(i=0;i<orderStack.length;i++){
-      let task=this.tasks.filter(task=>task.id==orderStack[i].id)[0]
-      task.title=orderStack[i].title,
-      task.subtitle=orderStack[i].subtitle
+  if(this.orderStack.length<2){
+    this.orderStack.push(id)
+  }else if(this.orderStack.length=2){
+    console.table(this.tasks)
+  let task1 = this.tasks.findIndex(item => item.id == this.orderStack[1]);
+  let task2 = this.tasks.findIndex(item => item.id == this.orderStack[2]);
+  [this.tasks[task1],this.tasks[task2]]=[this.tasks[task2],this.tasks[1]]
+      console.table(this.orderStack)
+      console.table(this.tasks)
+      this.orderStack=[]
+      // localStorage.setItem('tasks', JSON.stringify(this.tasks))
     }
-    //  orderStack=[]
-
-}
-
-// localStorage.setItem('tasks', JSON.stringify(this.tasks))
 }
   }
 }
