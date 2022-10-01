@@ -199,9 +199,11 @@ export default {
       document.querySelector("#closeButton").dispatchEvent(clickEvent);
     },
     reorderTasks(id) {
-      if (this.orderStack.length < 2) {
+      if (this.orderStack.length < 1) {
         this.orderStack.push(id);
-      } else if ((this.orderStack.length = 2)) {
+      } 
+      else if (this.orderStack.length < 2) {
+        this.orderStack.push(id);
         let task1 = this.tasks.findIndex(
           (item) => item.id == this.orderStack[0]
         );
@@ -216,7 +218,7 @@ export default {
         this.tasks.push('mlem')
         this.tasks.pop()
         localStorage.setItem("tasks", JSON.stringify(this.tasks));
-      }
+      } 
     },
   },
 };
