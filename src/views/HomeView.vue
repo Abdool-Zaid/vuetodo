@@ -1,6 +1,6 @@
 <template>
   <v-list-item-group v-model="settings" multiple>
-    <div v-for="task in tasks" :key="task">
+    <div v-for="task in tasks" :key="task.id">
       <v-list-item
         @click="executedTask(task.id)"
         @contextmenu.prevent="reorderTasks(task.id)"
@@ -28,7 +28,7 @@
           </v-list-item-content>
           <v-list-item-action>
             <div class="text-center">
-              <v-dialog v-model="dialog" width="500">
+              <v-dialog v-model="task.order" width="500">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="red lighten-2"
@@ -37,14 +37,14 @@
                     v-on="on"
                     icon
                   >
-                    <v-icon color="primary lighten-4"
-                      >mdi-pencil-box-multiple-outline
+                    <v-icon color="primary lighten-4" 
+                     >mdi-pencil-box-multiple-outline
                     </v-icon>
                   </v-btn>
                 </template>
-                <v-card>
-                  <v-card-title class="text-h5 grey lighten-2">
-                    edit task 
+                <v-card >
+                  <v-card-title class="text-h5 grey lighten-2" >
+                    edit task {{task.title}}
                   </v-card-title>
                   <v-card-text>
                     <v-row justify="center" class="pt-6">
@@ -57,7 +57,6 @@
                               label="task"
                               required
                               clearable
-                              :id='task.id'
                               @keyup.enter="alterStep(task.id)"
                             ></v-text-field>
                             <v-text-field
@@ -89,7 +88,7 @@
                       id="closeButton"
                       color="primary"
                       text
-                      @click="dialog = false"
+                      @click="task.order = false"
                     >
                       close
                     </v-btn>
@@ -179,10 +178,8 @@ export default {
       this.title = "";
       this.subtitle = "";
       localStorage.setItem("tasks", JSON.stringify(this.tasks));
-      console.log(this.tasks);
     },
     alterStep(id) {
-      console.log(id);
       let task = this.tasks.filter((task) => task.id == id)[0];
         if(this.alteredTitle.length>0){
         task.title = this.alteredTitle
