@@ -4,7 +4,7 @@
       <v-list-item
         @click="executedTask(task.id)"
         @contextmenu.prevent="reorderTasks(task.id)"
-        :class="{ 'blue lighten-4': task.status }"
+        :class="{ 'blue lighten-4': task.status,'orange lighten-4':task.order }"
         :id="task.id"
       >
         <template v-slot:default="{}">
@@ -165,6 +165,7 @@ export default {
         title: this.title,
         subtitle: this.subtitle,
         status: false,
+        order:false
       };
       this.tasks.push(newTask);
       this.title = "";
@@ -181,24 +182,29 @@ export default {
     },
     loadFunc() {
       let tasks = JSON.parse(localStorage.getItem("tasks"))
-        ? JSON.parse(localStorage.getItem("tasks"))
-        : localStorage.setItem(
-            "tasks",
-            JSON.stringify([
-              {
-                id: "t0",
-                title: "stay hungry",
-                subtitle: "stay foolish",
-                status: false,
+      ? JSON.parse(localStorage.getItem("tasks"))
+      : localStorage.setItem(
+        "tasks",
+        JSON.stringify([
+          {
+            id: "t0",
+            title: "stay hungry",
+            subtitle: "stay foolish",
+            status: false,
+            order:false
               },
             ])
           );
+          console.clear()
     },
     dismisModal() {
       let clickEvent = new Event("click");
       document.querySelector("#closeButton").dispatchEvent(clickEvent);
     },
     reorderTasks(id) {
+      let colour = this.tasks.filter((task) => task.id == id)[0];
+      let i
+      colour.order = true;
       if (this.orderStack.length < 1) {
         this.orderStack.push(id);
       } 
@@ -209,11 +215,14 @@ export default {
         );
         let task2 = this.tasks.findIndex(
           (item) => item.id == this.orderStack[1]
-        );
-        [this.tasks[task1], this.tasks[task2]] = [
-          this.tasks[task2],
-          this.tasks[task1],
-        ];
+          );
+          [this.tasks[task1], this.tasks[task2]] = [
+            this.tasks[task2],
+            this.tasks[task1],
+          ];
+          for(i=0;i<this.tasks.length;i++){
+this.tasks[i].order=false
+        }
         this.orderStack = [];
         this.tasks.push('mlem')
         this.tasks.pop()
