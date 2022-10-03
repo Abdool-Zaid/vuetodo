@@ -73,7 +73,7 @@
                             <v-btn
                               color="primary"
                               text
-                              @click="alterStep(task)"
+                              @click="alterStep(task.id)"
                             >
                               Submit
                             </v-btn>
