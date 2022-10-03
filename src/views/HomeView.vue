@@ -1,10 +1,13 @@
 <template>
   <v-list-item-group v-model="settings" multiple>
-    <div v-for="(task, index) in tasks" :key="index">
+    <div v-for="task in tasks" :key="task">
       <v-list-item
         @click="executedTask(task.id)"
         @contextmenu.prevent="reorderTasks(task.id)"
-        :class="{ 'blue lighten-4': task.status,'orange lighten-4':task.order }"
+        :class="{
+          'blue lighten-4': task.status,
+          'orange lighten-4': task.order,
+        }"
         :id="task.id"
       >
         <template v-slot:default="{}">
@@ -41,7 +44,7 @@
                 </template>
                 <v-card>
                   <v-card-title class="text-h5 grey lighten-2">
-                    edit task
+                    edit task 
                   </v-card-title>
                   <v-card-text>
                     <v-row justify="center" class="pt-6">
@@ -54,14 +57,15 @@
                               label="task"
                               required
                               clearable
-                              @keyup.enter="alterStep(task.id)" 
+                              :id='task.id'
+                              @keyup.enter="alterStep(task.id)"
                             ></v-text-field>
                             <v-text-field
                               ref="alteredsubtitle"
                               v-model="alteredsubtitle"
                               clearable
                               label="subtitle"
-                              @keyup.enter="alterStep(task.id)" 
+                              @keyup.enter="alterStep(task.id)"
                             ></v-text-field>
                           </v-card-text>
                           <v-divider class="mt-12"></v-divider>
@@ -69,7 +73,7 @@
                             <v-btn
                               color="primary"
                               text
-                              @click="alterStep(task.id)"
+                              @click="alterStep(task)"
                             >
                               Submit
                             </v-btn>
@@ -124,8 +128,12 @@
           </v-card-text>
           <v-divider class="mt-12"></v-divider>
           <v-card-actions>
-            <v-btn color="primary" text @click="progressForward()"
-            @keyup.enter="progressForward()">
+            <v-btn
+              color="primary"
+              text
+              @click="progressForward()"
+              @keyup.enter="progressForward()"
+            >
               Submit
             </v-btn>
           </v-card-actions>
@@ -165,37 +173,46 @@ export default {
         title: this.title,
         subtitle: this.subtitle,
         status: false,
-        order:false
+        order: false,
       };
       this.tasks.push(newTask);
       this.title = "";
       this.subtitle = "";
       localStorage.setItem("tasks", JSON.stringify(this.tasks));
+      console.log(this.tasks);
     },
     alterStep(id) {
+      console.log(id);
       let task = this.tasks.filter((task) => task.id == id)[0];
-      (task.title = this.alteredTitle), (task.subtitle = this.alteredsubtitle);
-      this.alteredTitle = "";
-      this.alteredsubtitle = "";
-      localStorage.setItem("tasks", JSON.stringify(this.tasks));
-      this.dismisModal();
+        if(this.alteredTitle.length>0){
+        task.title = this.alteredTitle
+      }else if (this.alteredsubtitle.length>0){
+        task.subtitle = this.alteredsubtitle;
+      }else if (this.alteredTitle.length>0&&this.alteredsubtitle.length>0){
+        task.title = this.alteredTitle
+        task.subtitle = this.alteredsubtitle;
+      }
+        this.alteredTitle = "";
+        this.alteredsubtitle = "";
+        localStorage.setItem("tasks", JSON.stringify(this.tasks));
+        this.dismisModal();
     },
     loadFunc() {
       let tasks = JSON.parse(localStorage.getItem("tasks"))
-      ? JSON.parse(localStorage.getItem("tasks"))
-      : localStorage.setItem(
-        "tasks",
-        JSON.stringify([
-          {
-            id: "t0",
-            title: "stay hungry",
-            subtitle: "stay foolish",
-            status: false,
-            order:false
+        ? JSON.parse(localStorage.getItem("tasks"))
+        : localStorage.setItem(
+            "tasks",
+            JSON.stringify([
+              {
+                id: "t0",
+                title: "stay hungry",
+                subtitle: "stay foolish",
+                status: false,
+                order: false,
               },
             ])
           );
-          console.clear()
+      console.clear();
     },
     dismisModal() {
       let clickEvent = new Event("click");
@@ -203,31 +220,30 @@ export default {
     },
     reorderTasks(id) {
       let colour = this.tasks.filter((task) => task.id == id)[0];
-      let i
+      let i;
       colour.order = true;
       if (this.orderStack.length < 1) {
         this.orderStack.push(id);
-      } 
-      else if (this.orderStack.length < 2) {
+      } else if (this.orderStack.length < 2) {
         this.orderStack.push(id);
         let task1 = this.tasks.findIndex(
           (item) => item.id == this.orderStack[0]
         );
         let task2 = this.tasks.findIndex(
           (item) => item.id == this.orderStack[1]
-          );
-          [this.tasks[task1], this.tasks[task2]] = [
-            this.tasks[task2],
-            this.tasks[task1],
-          ];
-          for(i=0;i<this.tasks.length;i++){
-this.tasks[i].order=false
+        );
+        [this.tasks[task1], this.tasks[task2]] = [
+          this.tasks[task2],
+          this.tasks[task1],
+        ];
+        for (i = 0; i < this.tasks.length; i++) {
+          this.tasks[i].order = false;
         }
         this.orderStack = [];
-        this.tasks.push('mlem')
-        this.tasks.pop()
+        this.tasks.push("mlem");
+        this.tasks.pop();
         localStorage.setItem("tasks", JSON.stringify(this.tasks));
-      } 
+      }
     },
   },
 };
